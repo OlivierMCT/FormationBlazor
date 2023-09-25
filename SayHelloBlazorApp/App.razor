@@ -1,0 +1,18 @@
+﻿@inject IBonjourService Bonjour
+
+<header class="bg-dark text-white">
+    <div class="container-fluid pt-3 pb-2">
+
+    <h1>
+        <small>L'application qui dit</small>
+        📢 @Salutation
+    </h1>
+    </div>
+</header>
+
+@code {
+    //public IBonjourService Bonjour { get; set; } = null!;
+    public string Salutation {
+        get { return Bonjour.ObtenirSalutation(); }
+    }
+}
