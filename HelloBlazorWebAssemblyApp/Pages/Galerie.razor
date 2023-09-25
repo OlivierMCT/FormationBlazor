@@ -5,28 +5,28 @@
 <div>
     <button disabled="@(!CanGoPrevious)" @onclick="GoPrevious">Précédent</button>
     <button disabled="@(!CanGoNext)" @onclick="GoNext">Suivant</button>
-    <button @onclick="ToggleLogoBlackAndWhite">@ButtonTextBlackAndWhite</button>
-    <button @onclick="ToggleLogoBlur">@ButtonTextBlur</button>
+    <button @onclick="() => ToggleLogoFilter(BlackAndWhiteFilter)">@ButtonTextBlackAndWhite</button>
+    <button @onclick="() => ToggleLogoFilter(BlurFilter)">@ButtonTextBlur</button>
 </div>
-<img src="@Logo" width="300" style="filter: @CssLogoFilter" />
+<img src="@Logo" width="300" style="border-radius: 5px; filter: @CssLogoFilter" />
 
 @code {
     private DateTime today = DateTime.Today;
 
     private List<string> filters = new List<string>();
+    private static string BlackAndWhiteFilter = "grayscale()";
+    private static string BlurFilter = "blur(5px)";
 
-    private bool IsLogoBlackAndWhite { get => filters.Contains("grayscale()"); }
+    private bool IsLogoBlackAndWhite { get => filters.Contains(BlackAndWhiteFilter); }
     private string ButtonTextBlackAndWhite { get => IsLogoBlackAndWhite ? "Couleur" : "Noir et Blanc"; }
 
-    private bool IsLogoBlur { get => filters.Contains("blur(5px)"); }
+    private bool IsLogoBlur { get => filters.Contains(BlurFilter); }
     private string ButtonTextBlur { get => IsLogoBlur ? "Net" : "Flou"; }
 
     private void ToggleLogoFilter(string filter) {
         if (!filters.Contains(filter)) filters.Add(filter);
         else filters.Remove(filter);
     }
-    private void ToggleLogoBlackAndWhite() => ToggleLogoFilter("grayscale()");
-    private void ToggleLogoBlur() => ToggleLogoFilter("blur(5px)");
 
     private string CssLogoFilter {
         get { return filters.Count == 0 ? "none" : string.Join(" ", filters); }
