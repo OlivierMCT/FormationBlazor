@@ -1,0 +1,28 @@
+﻿
+<section class="alert alert-secondary mt-3">
+    <section class="row">
+        <div class="col-md-6 col-lg-7 col-xl-8 mb-2 mb-lg-0">
+            <input @bind="@Prenom" @bind:event="oninput" type="text" placeholder="mon prénom" class="form-control" />
+        </div>
+        <div class="col-md-6 col-lg-5 col-xl-4 ">
+            <select disabled="@CouleursEnChargement" @bind="@CodeCouleur" class="form-select">
+                <option value="">@(CouleursEnChargement ? "chargement en cours" : "ma couleur")</option>
+                @foreach (var c in Couleurs) {
+                    <option value="@c.Code">@c.Libelle</option>
+                }
+            </select>
+        </div>
+    </section>
+</section>
+
+<section class="text-center">
+    @if (EstMessageAffichable) {
+        <h1 class="display-2" style="color: @Couleur?.Code">@Message</h1>
+    } else {
+        <img class="rounded img-fluid" src="https://i.pinimg.com/originals/7d/e6/67/7de6676888e7aaace80a65aaf08097c8.gif" />
+    }
+</section>
+
+<hr />
+<section><strong>Prenom </strong><code>@Prenom</code></section>
+<section><strong>Couleur </strong><code>@(new { Couleur?.Code, Couleur?.Libelle })</code></section>

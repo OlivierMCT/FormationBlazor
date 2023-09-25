@@ -1,18 +1,15 @@
 ﻿using SayHelloBlazorApp.Models;
+using System.Net.Http.Json;
 
 namespace SayHelloBlazorApp.Services {
-    public class StyleService {
-        public List<Couleur> ObtenirLesCouleurs() {
-            return new List<Couleur>() { 
-                new Couleur() { Code = "red", Libelle = "rouge vif" },
-                new Couleur() { Code = "lime", Libelle = "vert fluo" },
-                new Couleur() { Code = "aqua", Libelle = "bleu océan" },
-                new Couleur() { Code = "black", Libelle = "noir absolu" },
-                new Couleur() { Code = "purple", Libelle = "pluie violette" },
-                new Couleur() { Code = "yellow", Libelle = "jaune citron" },
-                new Couleur() { Code = "pink", Libelle = "rose bonbon" },
-                new Couleur() { Code = "silver", Libelle = "gris souris" },
-            };
+    public class StyleService : IStyleService {
+        private readonly HttpClient _http;
+        public StyleService(HttpClient http) { this._http = http; }
+
+        public async Task<List<Couleur>> ObtenirLesCouleursAsync() {
+            var couleurs = await _http.GetFromJsonAsync<ListeCouleursDto>(_http.BaseAddress + "?limit=1000");
+            return couleurs!.Results
+                .Select(dto => new Couleur() { Code = dto.HexCode, Libelle = dto.Name }).ToList();
         }
     }
 }
