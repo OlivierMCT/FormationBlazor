@@ -1,0 +1,53 @@
+﻿@page "/galerie"
+
+<h3>Galerie du @today.ToLongDateString()</h3>
+<hr />
+<div>
+    <button disabled="@(!CanGoPrevious)" @onclick="GoPrevious">Précédent</button>
+    <button disabled="@(!CanGoNext)" @onclick="GoNext">Suivant</button>
+    <button @onclick="ToggleLogoBlackAndWhite">@ButtonTextBlackAndWhite</button>
+    <button @onclick="ToggleLogoBlur">@ButtonTextBlur</button>
+</div>
+<img src="@Logo" width="300" style="filter: @CssLogoFilter" />
+
+@code {
+    private DateTime today = DateTime.Today;
+
+    private List<string> filters = new List<string>();
+
+    private bool IsLogoBlackAndWhite { get => filters.Contains("grayscale()"); }
+    private string ButtonTextBlackAndWhite { get => IsLogoBlackAndWhite ? "Couleur" : "Noir et Blanc"; }
+
+    private bool IsLogoBlur { get => filters.Contains("blur(5px)"); }
+    private string ButtonTextBlur { get => IsLogoBlur ? "Net" : "Flou"; }
+
+    private void ToggleLogoFilter(string filter) {
+        if (!filters.Contains(filter)) filters.Add(filter);
+        else filters.Remove(filter);
+    }
+    private void ToggleLogoBlackAndWhite() => ToggleLogoFilter("grayscale()");
+    private void ToggleLogoBlur() => ToggleLogoFilter("blur(5px)");
+
+    private string CssLogoFilter {
+        get { return filters.Count == 0 ? "none" : string.Join(" ", filters); }
+    }
+
+    private int index = 0;
+    private string Logo { get { return allLogos[index]; } }
+    private List<string>
+    allLogos = new List<string>
+        () {
+        "https://th.bing.com/th/id/OIP.L_Od205XI-2i5LXm8yw2IwHaEo?pid=ImgDet&rs=1",
+        "https://www.radiofrance.fr/s3/cruiser-production/2023/01/7fd8aaa3-8215-4749-8a14-67d024af6320/560x315_chaton-getty-picture-alliance.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1AJ2sT5YmRVmb9UkNpn-goNs7nwS6dJ1qYoIojcZjz_Pb90SmG1-Iq7vxgdYAm_Dl-a8&usqp=CAU",
+        "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2FFAC.2Fvar.2Ffemmeactuelle.2Fstorage.2Fimages.2Fanimaux.2Fveterinaire-les-conseils.2Fcheck-up-pour-un-chat-en-forme-01722.2F11467046-8-fre-FR.2Fles-10-points-clef-d-un-chat-en-forme.2Ejpg/1200x1200/quality/80/crop-from/center/les-10-points-clef-d-un-chat-en-forme.jpeg",
+        "https://www.filalapat.fr/sites/default/files/2020-07/age_chat_trouve.jpg",
+        "https://maviedechat.net/wp-content/uploads/2019/07/iStock-839515430-758x505.jpg",
+            };
+
+    private bool CanGoPrevious { get { return index > 0; } }
+    private void GoPrevious() { if (CanGoPrevious) index--; }
+
+    private bool CanGoNext { get { return index < allLogos.Count - 1; } }
+    private void GoNext() { if (CanGoNext) index++; }
+}
