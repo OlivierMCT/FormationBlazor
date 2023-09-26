@@ -9,7 +9,11 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<ICATodoService>(sp =>
-    new TodoService(new HttpClient { BaseAddress = new Uri("https://localhost:7034/") })
+    new TodoService(
+        new HttpClient { 
+            BaseAddress = new Uri(sp.GetRequiredService<IConfiguration>().GetValue<string>("TodoWebApi:Url")) 
+        }
+    )
 );
 
 await builder.Build().RunAsync();

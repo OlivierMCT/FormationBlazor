@@ -1,0 +1,36 @@
+﻿@if (Todo != null) {
+    <div class="card mb-2">
+        <div class="card-body">
+
+            <div class="d-flex align-items-center justify-content-between">
+                <h4 class="card-title">@Todo.Title </h4>
+                <i class="fa fa-2x fa-check-circle ms-2"></i>
+            </div>
+
+            <h6 class="card-subtitle">
+                <span class="badge text-bg-secondary">
+                    <i class="fa fa-calendar-day"></i>
+                    @Todo.DueDate.ToShortDateString()
+                </span>
+
+                <span class="badge text-bg-dark">
+                    <i class="fa fa-bullhorn"></i>
+                    @Todo.Status
+                </span>
+            </h6>
+            @Todo.Description
+        </div>
+
+        <div class="card-footer d-flex align-items-center  justify-content-between">
+            <span class="badge text-dark">@Todo.CategoryName</span>
+            <div class="btn-group">
+                <button class="btn btn-link">
+                    <i class="fa fa-map-signs text-dark"></i>
+                </button>
+                <button class="btn  btn-link">
+                    <i class="fa fa-trash-alt text-danger"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+}

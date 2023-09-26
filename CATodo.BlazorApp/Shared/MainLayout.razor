@@ -1,17 +1,27 @@
 ﻿@inherits LayoutComponentBase
+@inject IConfiguration Config
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<header class="text-bg-dark pt-2 pb-2 mb-3">
+    <div class="container-fluid">
+        <span class="badge text-bg-warning float-end">
+            <i class="fa fa-code-branch"></i>
+            @(Config["ASPNETCORE_ENVIRONMENT"])
+        </span>
+        <h1>Mes trucs à faire...</h1>
     </div>
+</header>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+<main class="container-fluid">
+    @Body
+</main>
+
+<footer class="text-bg-dark pt-2 pb-2 mt-3">
+    <section class="container-fluid d-flex">
+        <div>
+            Développé avec <i class="fa fa-heart text-danger"></i>
+            et beaucoup de <i class="fa fa-coffee"></i>
+            par <i class="fa fa-user-astronaut"></i>
+            <strong>Olivier</strong>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    </section>
+</footer>

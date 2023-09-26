@@ -62,8 +62,11 @@ namespace CATodo.BlazorApp.Services {
             this._http = http;
         }
 
-        public Task<ICollection<Todo>> ListAllTodosAsync() {
-            return Task.Run(() => new List<Todo>() as ICollection<Todo>);
+        public async Task<ICollection<Todo>> ListAllTodosAsync() {
+            string url = _http.BaseAddress + "todo";
+            List<Todo>? todos = await _http.GetFromJsonAsync<List<Todo>>(url);
+            if (todos == null) Console.Error.WriteLine("pas de tâche");
+            return todos ?? new List<Todo>();
         }
 
         public Task<Todo> ListOneTodoAsync(int todoId) {
