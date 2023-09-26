@@ -1,0 +1,75 @@
+﻿@model CATodo.WebApp.ViewModels.TodoIndexViewModel
+@{
+    ViewData["Title"] = "Mes trucs à faire";
+}
+<div>
+    <a asp-controller="Todo" asp-action="Create" class="float-end">
+        <i class="fa fa-plus-circle fa-3x text-primary"></i>
+    </a>
+
+    <h4><i class="fa fa-clipboard-list"></i> Mes trucs à faire</h4>
+
+    <form method="get">
+        <label>Filtrer par catégorie</label>
+        <select name="categoryId" class="form-select" asp-items="Model.CategoryListItems"></select>
+        <button class="btn btn-primary">Filtrer</button>
+    </form>
+
+    <hr />
+</div>
+
+@foreach (var todo in Model.Todos) {
+    <div class="card mb-2">
+        <div class="card-header">
+            <form class="float-end"
+                  asp-action="Toggle"
+                  asp-route-categoryId="@Model.CategoryListItems.FirstOrDefault(c => c.Selected)?.Value">
+                <input type="hidden" name="todoId" value="@todo.Id" />
+                <button class="btn btn-link" style="color:inherit">
+                    <i class="far fa@(todo.IsDone?"-check":"")-circle fa-3x float-end"></i>
+                </button>
+            </form>
+
+            <span class="badge text-dark" style="background-color: @todo.Category.Color">
+                @Html.DisplayFor(m => todo.Category.Name)
+            </span>
+            <h4>@Html.DisplayFor(m => todo.Title)</h4>
+        </div>
+        <div class="card-body">
+            <span class="badge bg-dark float-end ms-2">
+                @Html.DisplayFor(m => todo.DueDate)
+            </span>
+            <p>@Html.DisplayFor(m => todo.Description)</p>
+
+            @if (todo.IsLocation) {
+                <a href="@todo.MapUrl" target="_blank" class="btn btn-light">
+                    <i class="fa fa-map-marked-alt"></i>
+                    voir sur la carte (@Html.DisplayFor(m => todo.Location))
+                </a>
+            }
+        </div>
+        <div class="card-footer">
+            @if (todo.IsRemovable) {
+                <form asp-action="Delete"
+                      asp-route-categoryId="@Model.CategoryListItems.FirstOrDefault(c => c.Selected)?.Value">
+                    <input type="hidden" name="todoId" value="@todo.Id" />
+                    <button class="btn btn-danger float-end">
+                        <i class="fa fa-trash-alt"></i>
+                    </button>
+                </form>
+            }
+
+            @{
+                var severity = todo.Status switch {
+                    TodoStatus.Archived or TodoStatus.Closed => "secondary",
+                    TodoStatus.Pending => "success",
+                    TodoStatus.Late => "warning"
+                };
+            }
+            <span class="badge bg-@severity">
+                @Html.DisplayFor(m => todo.StatusText)
+            </span>
+        </div>
+    </div>
+}
+
