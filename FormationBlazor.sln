@@ -25,9 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B72419
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{DB2AEDE7-88C9-4C9E-A92A-63AE10CB2B5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CATodo.BlazorApp", "CATodo.BlazorApp\CATodo.BlazorApp.csproj", "{85AA4891-55F0-4E6D-8D51-4AD2D7E361AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CATodo.BlazorApp", "CATodo.BlazorApp\CATodo.BlazorApp.csproj", "{85AA4891-55F0-4E6D-8D51-4AD2D7E361AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CATodo.WebApi", "CATodo.WebApi\CATodo.WebApi.csproj", "{9072485B-600D-4D46-8821-92B12C375C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CATodo.WebApi", "CATodo.WebApi\CATodo.WebApi.csproj", "{9072485B-600D-4D46-8821-92B12C375C1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

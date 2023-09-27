@@ -1,0 +1,30 @@
+﻿<div class="toast-container position-fixed top-0 end-0 p-3">
+    @foreach (var toast in Toasts) {
+        string cssColor = toast.Level switch {
+            Models.ToastLevel.Success => "text-bg-success",
+            Models.ToastLevel.Information => "text-bg-info",
+            Models.ToastLevel.Warning => "text-bg-warning",
+            Models.ToastLevel.Error => "text-bg-danger",
+            _ => ""
+        };
+        string icon = toast.Level switch {
+            Models.ToastLevel.Success => "fa-check-circle",
+            Models.ToastLevel.Information => "fa-info-circle",
+            Models.ToastLevel.Warning => "fa-exclamation-circle",
+            Models.ToastLevel.Error => "fa-times-circle",
+            _ => ""
+        };
+
+        <div class="toast show text-bg-secondary @cssColor">
+            <div class="toast-body">
+                <div class="d-flex">
+                    <div class="me-2"><i class="fa fa-3x @icon"></i></div>
+                    <div>
+                        <strong class="d-block">@toast.Title</strong>
+                        @toast.Message
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

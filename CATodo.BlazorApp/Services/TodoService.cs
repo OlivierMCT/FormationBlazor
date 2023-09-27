@@ -69,8 +69,9 @@ namespace CATodo.BlazorApp.Services {
             return todos ?? new List<Todo>();
         }
 
-        public Task<Todo> ListOneTodoAsync(int todoId) {
-            throw new NotImplementedException();
+        public async Task<Todo> ListOneTodoAsync(int todoId) {
+            string url = _http.BaseAddress + "todo/" + todoId;
+            return await _http.GetFromJsonAsync<Todo>(url) ?? throw new CATodoException("pas de tâche n°" + todoId);
         }
 
         public Task<ICollection<Todo>> ListTodosByCategoryAsync(int categoryId) {
@@ -81,12 +82,47 @@ namespace CATodo.BlazorApp.Services {
             throw new NotImplementedException();
         }
 
-        public Task RemoveTodoAsync(int todoId) {
-            throw new NotImplementedException();
+        public async Task RemoveTodoAsync(int todoId) {
+            string url = _http.BaseAddress + "todo/" + todoId;
+            var response = await _http.DeleteAsync(url);
+            if (! response.IsSuccessStatusCode)
+            {
+                string msg = "Impossible de supprimer la tâche.";
+                msg += response.StatusCode switch {
+                    System.Net.HttpStatusCode.NotFound => " Elle n'existe pas !",
+                    System.Net.HttpStatusCode.Unauthorized => " Identifiez-vous d'abord.",
+                    System.Net.HttpStatusCode.Forbidden => " Pas les habilitations pour le faire...",
+                    System.Net.HttpStatusCode.BadRequest => ExtractMessage(response),
+                    _ => ""
+                };
+                throw new CATodoException(msg);
+            }
         }
 
-        public Task<Todo> ToggleTodoAsync(int todoId) {
-            throw new NotImplementedException();
+        private string ExtractMessage(HttpResponseMessage response) {
+            var task = response.Content.ReadAsStringAsync();
+            task.Wait();
+            return task.Result;
+        }
+
+        public async Task<Todo> ToggleTodoAsync(int todoId) {
+            Todo todoToPatch = await ListOneTodoAsync(todoId);            
+            string url = _http.BaseAddress + "todo/" + todoId;
+            TodoPatch dto = new TodoPatch() { Id = todoId, IsDone = !todoToPatch.IsDone };
+            var response = await _http.PatchAsync(url, JsonContent.Create(dto));
+            if (!response.IsSuccessStatusCode)
+            {
+                string msg = "Impossible d'inverser la tâche.";
+                msg += response.StatusCode switch {
+                    System.Net.HttpStatusCode.NotFound => " Elle n'existe pas !",
+                    System.Net.HttpStatusCode.Unauthorized => " Identifiez-vous d'abord.",
+                    System.Net.HttpStatusCode.Forbidden => " Pas les habilitations pour le faire...",
+                    System.Net.HttpStatusCode.BadRequest => ExtractMessage(response),
+                    _ => ""
+                };
+                throw new CATodoException(msg);
+            }
+            return await response.Content.ReadFromJsonAsync<Todo>() ?? throw new CATodoException("pas de tâche n°" + todoId);
         }
 
         public Task<Todo> CreateTodoAsync(TodoCreate todoInfo) {

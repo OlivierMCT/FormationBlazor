@@ -1,0 +1,22 @@
+﻿<EditForm Model="@TodoCreateModel">
+    <InputText @bind-Value="@TodoCreateModel.Title" @oninput="e => TodoCreateModel.Title = e.Value as string"></InputText>
+    <InputTextArea @bind-Value="@TodoCreateModel.Description"></InputTextArea>
+    <InputDate @bind-Value="@TodoCreateModel.DueDate"></InputDate>
+    <InputNumber @bind-Value="@TodoCreateModel.Latitude"></InputNumber>
+    <InputNumber @bind-Value="@TodoCreateModel.Longitude"></InputNumber>
+    <InputSelect @bind-Value="@TodoCreateModel.CategoryId">
+        <option value="">Catégorie</option>
+        @foreach (var c in Categories) {
+            <option value="@c.Id">@c.Name</option>
+        }
+    </InputSelect>
+</EditForm>
+<code>@DebugTodoCreateModel</code>
+
+
+<NavLink href="/" class="btn btn-sm btn-outline-dark">
+    <i class="fa fa-chevron-circle-left"></i>
+    Retour
+</NavLink>
+
+<button @onclick="Save">Valider</button>

@@ -8,6 +8,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<ICATodoService>(sp =>
     new TodoService(
         new HttpClient { 

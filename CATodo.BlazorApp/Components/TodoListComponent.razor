@@ -1,14 +1,16 @@
-﻿<section class="row">
+﻿@if (IsLoading) { } else {
+
+<section class="row">
     <div class="col-sm-5 col-md-4 col-lg-3 col-xl-2">
         <ul class="list-group" @onclick="() => IsCategoriesMenuOpen = !IsCategoriesMenuOpen">
             <li class="d-sm-none list-group-item list-group-item-action mb-1">
                 Categories
-                <i class="fa fa-chevron-circle-@(IsCategoriesMenuOpen?"up":"down") float-end mt-1"></i>
+                <i class="fa fa-chevron-circle-@(IsCategoriesMenuOpen ? "up" : "down") float-end mt-1"></i>
             </li>
         </ul>
-        <ul class="list-group @(!IsCategoriesMenuOpen?"d-none":"") d-sm-block">
+        <ul class="list-group @(!IsCategoriesMenuOpen ? "d-none" : "") d-sm-block">
             @foreach (var category in Categories) {
-                <li @onclick="() => ToggleCategory(category)" class="list-group-item @(IsSelected(category)?"list-group-item-dark":"")">
+                <li @onclick="() => ToggleCategory(category)" class="list-group-item @(IsSelected(category) ? "list-group-item-dark" : "")">
                     <span class="float-end badge rounded-pill text-bg-light">
                         @(Todos.Count(t => t.CategoryId == category.Id))
                     </span>
@@ -22,16 +24,26 @@
     </div>
 
     <div class="col-sm-7 col-md-8 col-lg-9 col-xl-10">
-        <div class="btn-group">
+        <div class="btn-group mb-2">
             <button @onclick="() => IsTodosSortedByTitle = !IsTodosSortedByTitle" class="btn btn-sm btn-outline-dark">
-                <i class="fa fa-arrow-down-@(IsTodosSortedByTitle?"a-z":"z-a")"></i>
+                <i class="fa fa-arrow-down-@(IsTodosSortedByTitle ? "a-z" : "z-a")"></i>
                 Trier par ordre alphabétique
             </button>
+
+            <NavLink href="/nouvelle-tache" class="btn btn-sm btn-outline-dark">
+                <i class="fa fa-plus-circle"></i>
+                Ajouter une tâche
+            </NavLink>
         </div>
         @foreach (var todo in Todos) {
-            <div class="@(IsDisplayable(todo)?"":"d-none")">
-                <TodoDetailComponent Todo="todo"></TodoDetailComponent>
+            <div class="@(IsDisplayable(todo) ? "" : "d-none")">
+                <TodoDetailComponent 
+                    Todo="todo" 
+                    Category="GetCategoryFor(todo)"
+                    OnDeleting="DeleteTodoAsync"
+                    OnToggling="ToggleTodoAsync"></TodoDetailComponent>
             </div>
         }
     </div>
 </section>
+}

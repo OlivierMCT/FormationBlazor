@@ -25,7 +25,30 @@ namespace CATodo.WebApi.Controllers {
         public ActionResult<Todo> GetById([FromRoute(Name = "id")] int todoId) {
             try {
                 return _todoService.ListOneTodo(todoId);
-            } catch(CATodoException tex) {
+            } catch (CATodoException tex) {
+                return NotFound(tex.Message);
+            }
+        }
+
+        [HttpDelete, Route("{id:int}")]
+        public ActionResult DeleteById(int id) {
+            try {
+                _todoService.RemoveTodo(id);
+                return NoContent();
+            } catch (CATodoException tex) {
+                return BadRequest(tex.Message);
+            }
+        }
+
+        [HttpPatch, Route("{id:int}")]
+        public ActionResult<Todo> UpdateDone([FromRoute(Name = "id")] int todoId, [FromBody] TodoPatch infos) {
+            try {
+                if (todoId != infos.Id) return BadRequest();
+                Todo todo = _todoService.ListOneTodo(todoId);
+                if (todo.IsDone != infos.IsDone)
+                    todo = _todoService.ToggleTodo(infos.Id.Value);
+                return Ok(todo);
+            } catch (CATodoException tex) {
                 return NotFound(tex.Message);
             }
         }
