@@ -2,10 +2,12 @@
 using CATodo.BlazorApp.Services;
 using CATodo.BLLContracts;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace CATodo.BlazorApp.Components {
-    public partial class TodoListComponent {
+    public partial class TodoListComponent : IAsyncDisposable {
         [Inject] public ICATodoService TodoService { get; set; } = null!;
+        [Inject] public HubConnection TodoHubConnection { get; set; } = null!;
 
         public List<Category> Categories { get; set; } = new();
         public List<Category> SelectedCategories { get; set; } = new();
@@ -43,6 +45,47 @@ namespace CATodo.BlazorApp.Components {
             Categories = taskCategories.Result.OrderBy(t => t.Name).ToList();
             Categories.ForEach(c => SelectedCategories.Add(c));
             Todos = taskTodos.Result.OrderBy(t => t.Title).ToList();
+
+            TodoHubConnection.On<Todo>("PushNewTodo", newTodo => { 
+                if(! Todos.Any(t => t.Id == newTodo.Id)) {
+                    Todos.Add(newTodo);
+                    IsTodosSortedByTitle = IsTodosSortedByTitle;
+                    MessageService.PostMessage(new ToastBlazorModel() {
+                        Level = ToastLevel.Information,
+                        Message = $"Nouvelle tâche : {newTodo.Title}",
+                        Title = "Notification"
+                    });
+                    StateHasChanged();
+                }
+            });
+
+            TodoHubConnection.On<Todo>("PushUpdateTodo", updatedTodo => {
+                int index = Todos.FindIndex(t => t.Id == updatedTodo.Id);
+                Todos.RemoveAt(index);
+                Todos.Insert(index, updatedTodo);
+                MessageService.PostMessage(new ToastBlazorModel() {
+                    Level = ToastLevel.Information,
+                    Message = $"Modification de la tâche {updatedTodo.Title}",
+                    Title = "Notification"
+                });
+                StateHasChanged();
+            });
+
+            TodoHubConnection.On<int>("PushDeleteTodo", deletedTodoId => {
+                Todo? deletedTodo = Todos.FirstOrDefault(t => t.Id == deletedTodoId);
+                if (deletedTodo != null) {
+                    Todos.Remove(deletedTodo);
+                    MessageService.PostMessage(new ToastBlazorModel() {
+                        Level = ToastLevel.Information,
+                        Message = $"Suppression de la tâche {deletedTodo.Title}",
+                        Title = "Notification"
+                    });
+                    StateHasChanged();
+                }
+            });
+
+            await TodoHubConnection.StartAsync();
+
             IsLoading = false;
         }
 
@@ -79,6 +122,10 @@ namespace CATodo.BlazorApp.Components {
                     Title = "Erreur"
                 });
             }
+        }
+
+        public async ValueTask DisposeAsync() {
+            await TodoHubConnection.StopAsync();
         }
     }
 }

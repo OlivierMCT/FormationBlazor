@@ -135,5 +135,57 @@ namespace CATodo.BLLImplementation {
         public Todo UpdateCategory(CategoryUpdate categoryInfo) {
             throw new NotImplementedException();
         }
+
+        public Task<ICollection<Todo>> ListAllTodosAsync() {
+            return Task.Run(() => ListAllTodos());
+        }
+
+        public Task<Todo> ListOneTodoAsync(int todoId) {
+            return Task.Run(() => ListOneTodo(todoId));
+        }
+
+        public Task<ICollection<Todo>> ListTodosByCategoryAsync(int categoryId) {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<Todo>> SearchTodosAsync(string keyword) {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTodoAsync(int todoId) {
+            throw new NotImplementedException();
+        }
+
+        public Task<Todo> ToggleTodoAsync(int todoId) {
+            throw new NotImplementedException();
+        }
+
+        public Task<Todo> CreateTodoAsync(TodoCreate todoInfo) {
+            throw new NotImplementedException();
+        }
+
+        public Task<Todo> UpdateTodoAsync(TodoUpdate todoInfo) {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<Category>> ListAllCategoriesAsync() {
+            throw new NotImplementedException();
+        }
+
+        public Task<Category> ListOneCategoryAsync(int categoryId) {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveCategoryAsync(int categoryId) {
+            throw new NotImplementedException();
+        }
+
+        public Task<Todo> CreateCategoryAsync(CategoryCreate categoryInfo) {
+            throw new NotImplementedException();
+        }
+
+        public Task<Todo> UpdateCategoryAsync(CategoryUpdate categoryInfo) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -125,8 +125,20 @@ namespace CATodo.BlazorApp.Services {
             return await response.Content.ReadFromJsonAsync<Todo>() ?? throw new CATodoException("pas de tâche n°" + todoId);
         }
 
-        public Task<Todo> CreateTodoAsync(TodoCreate todoInfo) {
-            throw new NotImplementedException();
+        public async Task<Todo> CreateTodoAsync(TodoCreate todoInfo) {
+            var url = _http.BaseAddress + "todo";
+            var response = await _http.PostAsJsonAsync(url, todoInfo);
+            if (!response.IsSuccessStatusCode) {
+                string msg = "Impossible de créer la tâche.";
+                msg += response.StatusCode switch {
+                    System.Net.HttpStatusCode.Unauthorized => " Identifiez-vous d'abord.",
+                    System.Net.HttpStatusCode.Forbidden => " Pas les habilitations pour le faire...",
+                    System.Net.HttpStatusCode.BadRequest => ExtractMessage(response),
+                    _ => ""
+                };
+                throw new CATodoException(msg);
+            }
+            return await response.Content.ReadFromJsonAsync<Todo>() ?? throw new CATodoException("pas de tâche");
         }
 
         public Task<Todo> UpdateTodoAsync(TodoUpdate todoInfo) {

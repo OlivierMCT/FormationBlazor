@@ -1,0 +1,8 @@
+﻿/*#summary:not(:has(> ul)) {
+    display: none;
+}
+
+#summary:has(> ul) {
+    display: block;
+}*/
+

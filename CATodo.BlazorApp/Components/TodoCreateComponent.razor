@@ -1,22 +1,91 @@
-﻿<EditForm Model="@TodoCreateModel">
-    <InputText @bind-Value="@TodoCreateModel.Title" @oninput="e => TodoCreateModel.Title = e.Value as string"></InputText>
-    <InputTextArea @bind-Value="@TodoCreateModel.Description"></InputTextArea>
-    <InputDate @bind-Value="@TodoCreateModel.DueDate"></InputDate>
-    <InputNumber @bind-Value="@TodoCreateModel.Latitude"></InputNumber>
-    <InputNumber @bind-Value="@TodoCreateModel.Longitude"></InputNumber>
-    <InputSelect @bind-Value="@TodoCreateModel.CategoryId">
-        <option value="">Catégorie</option>
-        @foreach (var c in Categories) {
-            <option value="@c.Id">@c.Name</option>
+﻿<EditForm @ref="AjoutForm" Model="@TodoCreateModel" class="row" OnValidSubmit="Save">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <div class="col-12 mb-3">
+        <InputSelect @bind-Value="@TodoCreateModel.CategoryId" class="form-select">
+            <option value="">Catégorie</option>
+            @foreach (var c in Categories) {
+                <option value="@c.Id">@c.Name</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => TodoCreateModel.CategoryId"></ValidationMessage>
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="form-floating">
+            <InputText @bind-Value="@TodoCreateModel.Title" placeholder="floating" class="form-control"></InputText>
+            <label class="form-label">Titre</label>
+        </div>
+        <ValidationMessage For="() => TodoCreateModel.Title"></ValidationMessage>
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="form-floating">
+            <InputDate @bind-Value="@TodoCreateModel.DueDate" placeholder="floating" class="form-control"></InputDate>
+            <label class="form-label">Echéance</label>
+        </div>
+        <ValidationMessage For="() => TodoCreateModel.DueDate"></ValidationMessage>
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="form-floating">
+            <InputTextArea @bind-Value="@TodoCreateModel.Description" placeholder="floating" class="form-control" style="min-height: 100px"></InputTextArea>
+            <label class="form-label">Description</label>
+        </div>
+        <ValidationMessage For="() => TodoCreateModel.Description"></ValidationMessage>
+    </div>
+
+    <div class="col-6 mb-3">
+        <div class="form-floating">
+            <InputNumber TValue="double?" 
+                         ValueExpression="() => TodoCreateModel.Latitude" 
+                         ValueChanged="UpdateLatitude" 
+                         placeholder="floating" class="form-control"></InputNumber>
+            <label class="form-label">Latitude</label>
+        </div>
+        <ValidationMessage For="() => TodoCreateModel.Latitude"></ValidationMessage>
+    </div>
+
+    <div class="col-6 mb-3">
+        <div class="form-floating">
+            <InputNumber TValue="double?"
+                         ValueExpression="() => TodoCreateModel.Longitude"  
+                         ValueChanged="UpdateLongitude"
+                         placeholder="floating" class="form-control"></InputNumber>
+            <label class="form-label">Longitude</label>
+        </div>
+        <ValidationMessage For="() => TodoCreateModel.Longitude"></ValidationMessage>
+    </div>
+
+    <div class="col-12 mb-3 text-center">
+        <NavLink href="/" class="btn btn-dark">
+            <i class="fa fa-chevron-circle-left"></i>
+            Retour
+        </NavLink>
+
+        <button class="btn btn-primary" @onclick="ClickSubmit">
+            <i class="fa fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+    </div>
+
+    <div class="col-12 mb-3">
+        @if (IsFormInvalid && IsFormSubmitted) {
+            <div id="summary" class="alert alert-danger text-danger">
+                <strong>Merci de corriger toutes ces erreurs:</strong>
+                <ul>
+                    @foreach(var msg in ErrorMessages) {
+                        <li>@msg</li>
+                    }
+                </ul>
+            </div>
         }
-    </InputSelect>
+    </div>
 </EditForm>
-<code>@DebugTodoCreateModel</code>
+
+<section>
+    <hr />
+    <code>@DebugTodoCreateModel</code>
+</section>
 
 
-<NavLink href="/" class="btn btn-sm btn-outline-dark">
-    <i class="fa fa-chevron-circle-left"></i>
-    Retour
-</NavLink>
-
-<button @onclick="Save">Valider</button>

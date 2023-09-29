@@ -9,10 +9,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.22" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.22" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.22" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CATodo\CATodo.BLLContracts\CATodo.BLLContracts.csproj" />
+    <ProjectReference Include="..\CATodo.BLLContracts\CATodo.BLLContracts.csproj" />
   </ItemGroup>
 
 </Project>

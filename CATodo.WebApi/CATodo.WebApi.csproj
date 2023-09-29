@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CATodo\CATodo.BLLContracts\CATodo.BLLContracts.csproj" />
-    <ProjectReference Include="..\..\CATodo\CATodo.BLLImplementation\CATodo.BLLImplementation.csproj" />
-    <ProjectReference Include="..\..\CATodo\CATodo.DAL\CATodo.DAL.csproj" />
+    <ProjectReference Include="..\CATodo.BLLContracts\CATodo.BLLContracts.csproj" />
+    <ProjectReference Include="..\CATodo.BLLImplementation\CATodo.BLLImplementation.csproj" />
+    <ProjectReference Include="..\CATodo.DAL\CATodo.DAL.csproj" />
   </ItemGroup>
 
 </Project>

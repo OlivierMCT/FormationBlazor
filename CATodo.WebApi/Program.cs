@@ -2,6 +2,7 @@
 using CATodo.BLLContracts;
 using CATodo.BLLImplementation;
 using CATodo.DAL;
+using CATodo.WebApi.Hubs;
 using CATodo.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,8 @@ builder.Services.AddCors(
     config => config.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 );
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +39,8 @@ if (app.Environment.IsDevelopment()) {
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapHub<TodoHub>("todo-hub");
 
 app.UseCors();
 app.MapControllers();

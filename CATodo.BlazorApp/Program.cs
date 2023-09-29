@@ -3,6 +3,7 @@ using CATodo.BlazorApp.Services;
 using CATodo.BLLContracts;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -16,5 +17,12 @@ builder.Services.AddScoped<ICATodoService>(sp =>
         }
     )
 );
+builder.Services.AddTransient(sp => 
+    new HubConnectionBuilder()
+        .WithUrl(sp.GetRequiredService<IConfiguration>().GetValue<string>("TodoWebApi:Url") + "todo-hub")
+        .WithAutomaticReconnect()
+        .Build()
+);
+
 
 await builder.Build().RunAsync();

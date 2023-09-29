@@ -15,8 +15,11 @@ namespace CATodo.BLLContracts {
         [DateInFuture(IncludeToday = true, ErrorMessage = "🧐 la date d'échéance est invalide")]
         public DateTime? DueDate { get; set; }
 
+        [RequiredWith(nameof(Longitude), ErrorMessage = "🧐 la latitude est obligatoire")]
         [Range(-90, 90, ErrorMessage = "🧐 la latitude est invalide")]
         public double? Latitude { get; set; }
+
+        [RequiredWith(nameof(Latitude), ErrorMessage = "🧐 la longitude est obligatoire")]
         [Range(-180, 180, ErrorMessage = "🧐 la longitude est invalide")]
         public double? Longitude { get; set; }
 
